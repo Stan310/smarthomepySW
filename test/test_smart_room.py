@@ -30,3 +30,11 @@ class TestSmartRoom(unittest.TestCase):
         room = SmartRoom()
         outcome = room.check_enough_light()
         self.assertTrue(outcome)
+
+    @patch.object(GPIO, "input")
+    def test_enough_light_no(self, mock_photoresistor: Mock):
+        mock_photoresistor.return_value = False
+        room = SmartRoom()
+        outcome = room.check_enough_light()
+        self.assertFalse(outcome)
+
