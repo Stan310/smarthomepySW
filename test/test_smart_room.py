@@ -49,3 +49,37 @@ class TestSmartRoom(unittest.TestCase):
         room.manage_light_level()
         mock_led.assert_called_once_with(room.LED_PIN, True)
         self.assertTrue( room.light_on)
+
+    @patch.object(GPIO, "output")
+    @patch.object(SmartRoom, "check_enough_light")
+    @patch.object(SmartRoom, "check_room_occupancy")
+    def test_person_in_room_enough_light(self, mock_infrared_sensor: Mock, mock_photoresistor: Mock, mock_led: Mock):
+        mock_infrared_sensor.return_value = True
+        mock_photoresistor.return_value = True
+        room = SmartRoom()
+        room.manage_light_level()
+        mock_led.assert_called_once_with(room.LED_PIN, False)
+        self.assertFalse(room.light_on)
+
+    @patch.object(GPIO, "output")
+    @patch.object(SmartRoom, "check_enough_light")
+    @patch.object(SmartRoom, "check_room_occupancy")
+    def test_person_in_room_enough_light(self, mock_infrared_sensor: Mock, mock_photoresistor: Mock,
+                                             mock_led: Mock):
+        mock_infrared_sensor.return_value = True
+        mock_photoresistor.return_value = True
+        room = SmartRoom()
+        room.manage_light_level()
+        mock_led.assert_called_once_with(room.LED_PIN, False)
+        self.assertTrue(room.light_on)
+
+    @patch.object(GPIO, "output")
+    @patch.object(SmartRoom, "check_enough_light")
+    @patch.object(SmartRoom, "check_room_occupancy")
+    def test_no_person_in_room_enough_light(self, mock_infrared_sensor: Mock, mock_photoresistor: Mock, mock_led: Mock):
+        mock_infrared_sensor.return_value = False
+        mock_photoresistor.return_value = True
+        room = SmartRoom()
+        room.manage_light_level()
+        mock_led.assert_called_once_with(room.LED_PIN, True)
+        self.assertFalse(room.light_on)
